@@ -11,11 +11,11 @@ export async function getPhotosPixybay(userInput, page) {
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
-    per_page: 4,
+    per_page: 40,
     page,
   });
   const res = await axios.get(`${BASE_URL}?${params}`);
-  // page += 1;
+
   console.log(res.data);
   return res.data;
 }
