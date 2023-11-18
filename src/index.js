@@ -7,6 +7,7 @@ import { form, inputSearch, galleryWrapper, loadMore } from './refs';
 let page = 1;
 let totalPhoto = 0;
 let arrOfPhotos = [];
+let userInput;
 
 //
 async function getData(userInput, page) {
