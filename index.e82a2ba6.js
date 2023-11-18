@@ -1,0 +1,2 @@
+function t(t="light"){window.localStorage.setItem("theme",t),"dark"==e()?document.body.classList.add("active"):document.body.classList.remove("active")}function e(){return window.localStorage.getItem("theme")}window.document.querySelector(".switcher-input").addEventListener("change",(()=>{t("dark"==e()?"light":"dark")})),function(){let n=e();t(null==n||null==n||"string"!=typeof n?"light":"dark"==n?"dark":"light")}();
+//# sourceMappingURL=index.e82a2ba6.js.map
