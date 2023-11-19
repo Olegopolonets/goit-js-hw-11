@@ -1,7 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
-import { getPhotosPixybay } from './pixabay-api';
+import { getPhotosPixybay } from './pixabay-api.js';
 import { form, inputSearch, galleryWrapper, loadMore } from './refs.js';
 
 let perPage = 40;
