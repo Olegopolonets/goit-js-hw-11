@@ -2,17 +2,18 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import Notiflix from 'notiflix';
 import { getPhotosPixybay } from './pixabay-api';
-import { form, inputSearch, galleryWrapper, loadMore } from './refs';
+import { form, inputSearch, galleryWrapper, loadMore } from './refs.js';
 
+let perPage = 40;
 let page = 1;
 let totalPhoto = 0;
 let arrOfPhotos = [];
 let userInput;
 
 //
-async function getData(userInput, page) {
+async function getData(userInput, page, perPage) {
   try {
-    const response = await getPhotosPixybay(userInput, page);
+    const response = await getPhotosPixybay(userInput, page, perPage);
     totalPhoto = response.totalHits;
     arrOfPhotos = response.hits;
     galleryWrapper.insertAdjacentHTML('beforeend', createCards(arrOfPhotos));
@@ -62,13 +63,21 @@ form.addEventListener('submit', async event => {
   event.preventDefault();
   page = 1;
   galleryWrapper.innerHTML = '';
-  userInput = inputSearch.value;
-  await getData(userInput, page);
+  userInput = inputSearch.value.trim();
+  if (!userInput) {
+    Notiflix.Notify.failure(`I'm sorry, but I can't process an empty request.`);
+    loadMore.classList.add('is-hidden');
+  }
+
+  await getData(userInput, page, perPage);
   if (arrOfPhotos.length === 0) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
     loadMore.classList.add('is-hidden');
+  }
+  if (arrOfPhotos.length < perPage) {
+    Notiflix.Notify.success(`Hooray! We found ${totalPhoto} images.`);
   } else {
     Notiflix.Notify.success(`Hooray! We found ${totalPhoto} images.`);
     loadMore.classList.remove('is-hidden');
@@ -78,7 +87,7 @@ form.addEventListener('submit', async event => {
 loadMore.addEventListener('click', async () => {
   page += 1;
   console.log(page);
-  await getData(userInput, page);
+  await getData(userInput, page, perPage);
 
   const { height: cardHeight } = document
     .querySelector('.gallery')
@@ -89,7 +98,7 @@ loadMore.addEventListener('click', async () => {
     behavior: 'smooth',
   });
 
-  if (arrOfPhotos.length === 0) {
+  if (arrOfPhotos.length < perPage) {
     Notiflix.Notify.info(
       `We're sorry, but you've reached the end of search results.`
     );
