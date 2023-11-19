@@ -78,6 +78,7 @@ form.addEventListener('submit', async event => {
   }
   if (arrOfPhotos.length < perPage) {
     Notiflix.Notify.success(`Hooray! We found ${totalPhoto} images.`);
+    loadMore.classList.add('is-hidden');
   } else {
     Notiflix.Notify.success(`Hooray! We found ${totalPhoto} images.`);
     loadMore.classList.remove('is-hidden');
