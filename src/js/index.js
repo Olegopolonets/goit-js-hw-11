@@ -21,6 +21,14 @@ async function getData(userInput, page, perPage) {
       captionsData: 'alt',
       captionDelay: 250,
     });
+
+    const lastPage = Math.ceil(response.totalHits / perPage);
+    if (lastPage === page) {
+      Notiflix.Notify.info(
+        `We're sorry, but you've reached the end of search results.`
+      );
+      loadMore.classList.add('is-hidden');
+    }
   } catch (error) {
     console.log(error);
     Notiflix.Notify.failure(`❌ Oops!… `);
@@ -64,9 +72,11 @@ form.addEventListener('submit', async event => {
   page = 1;
   galleryWrapper.innerHTML = '';
   userInput = inputSearch.value.trim();
+
   if (!userInput) {
     Notiflix.Notify.failure(`I'm sorry, but I can't process an empty request.`);
     loadMore.classList.add('is-hidden');
+    return;
   }
 
   await getData(userInput, page, perPage);
@@ -89,7 +99,10 @@ loadMore.addEventListener('click', async () => {
   page += 1;
   console.log(page);
   await getData(userInput, page, perPage);
+  smoothScrool();
+});
 
+function smoothScrool() {
   const { height: cardHeight } = document
     .querySelector('.gallery')
     .firstElementChild.getBoundingClientRect();
@@ -98,14 +111,7 @@ loadMore.addEventListener('click', async () => {
     top: cardHeight * 2,
     behavior: 'smooth',
   });
-
-  if (arrOfPhotos.length < perPage) {
-    Notiflix.Notify.info(
-      `We're sorry, but you've reached the end of search results.`
-    );
-    loadMore.classList.add('is-hidden');
-  }
-});
+}
 
 const up = document.querySelector('.up');
 
